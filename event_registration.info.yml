@@ -3,3 +3,6 @@ description: Event Registration for Drupal Commerce
 package: Event
 core_version_requirement: ^9
 type: module
+dependencies:
+  - event:event
+  - commerce:commerce
