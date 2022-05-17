@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - event_registration
+id: registrant
+label: Registrant
+display_label: 'Registrant Information'
+multiple: true
+registration: false
+roles: {  }
+allow_revisions: false
+new_revision: false
+third_party_settings:
+  commerce_order:
+    customer_profile_type: true

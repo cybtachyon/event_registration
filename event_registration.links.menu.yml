@@ -1,0 +1,39 @@
+event_registration._default:
+  title: 'Event Registration'
+  parent: system.admin_structure
+  description: 'Create and manage fields, forms, and display settings for different event registration entities'
+  route_name: entity.event_registration.collection
+
+# Registration menu items definition
+entity.event_registration.collection:
+  title: 'Registration list'
+  route_name: entity.event_registration.collection
+  description: 'List Registration entities'
+  parent: event_registration._default
+  weight: 100
+
+
+# Registration type menu items definition
+entity.event_registration_bundle.collection:
+  title: 'Registration Bundles'
+  route_name: entity.event_registration_bundle.collection
+  description: 'List Registration type (bundles)'
+  parent: event_registration._default
+  weight: 99
+
+# Registration type menu items definition
+entity.event_registration_type.collection:
+  title: 'Registration type list'
+  route_name: entity.event_registration_type.collection
+  description: 'List Registration type entities'
+  parent: event_registration._default
+  weight: 100
+
+
+# Registration type type menu items definition
+entity.event_registration_type_bundle.collection:
+  title: 'Registration type Bundles'
+  route_name: entity.event_registration_type_bundle.collection
+  description: 'List Registration type type (bundles)'
+  parent: event_registration._default
+  weight: 99

@@ -1,0 +1,66 @@
+add event_registration entities:
+  title: 'Create new Registration entities'
+
+administer event_registration entities:
+  title: 'Administer Registration entities'
+  description: 'Allow to access the administration form to configure Registration entities.'
+  restrict access: true
+
+delete event_registration entities:
+  title: 'Delete Registration entities'
+
+edit event_registration entities:
+  title: 'Edit Registration entities'
+
+view published event_registration entities:
+  title: 'View published Registration entities'
+
+view unpublished event_registration entities:
+  title: 'View unpublished Registration entities'
+
+view all event_registration revisions:
+  title: 'View all Registration revisions'
+
+revert all event_registration revisions:
+  title: 'Revert all Registration revisions'
+  description: 'Role requires permission <em>view Registration revisions</em> and <em>edit rights</em> for event_registration entities in question or <em>administer event_registration entities</em>.'
+
+delete all event_registration revisions:
+  title: 'Delete all revisions'
+  description: 'Role requires permission to <em>view Registration revisions</em> and <em>delete rights</em> for event_registration entities in question or <em>administer event_registration entities</em>.'
+
+permission_callbacks:
+  - \Drupal\event_registration\RegistrationPermissions::generatePermissions
+add registration type entities:
+  title: 'Create new Registration type entities'
+
+administer registration type entities:
+  title: 'Administer Registration type entities'
+  description: 'Allow to access the administration form to configure Registration type entities.'
+  restrict access: true
+
+delete registration type entities:
+  title: 'Delete Registration type entities'
+
+edit registration type entities:
+  title: 'Edit Registration type entities'
+
+view published registration type entities:
+  title: 'View published Registration type entities'
+
+view unpublished registration type entities:
+  title: 'View unpublished Registration type entities'
+
+view all registration type revisions:
+  title: 'View all Registration type revisions'
+
+revert all registration type revisions:
+  title: 'Revert all Registration type revisions'
+  description: 'Role requires permission <em>view Registration type revisions</em> and <em>edit rights</em> for registration type entities in question or <em>administer registration type entities</em>.'
+
+delete all registration type revisions:
+  title: 'Delete all revisions'
+  description: 'Role requires permission to <em>view Registration type revisions</em> and <em>delete rights</em> for registration type entities in question or <em>administer registration type entities</em>.'
+
+permission_callbacks:
+  - \Drupal\event_registration\RegistrationTypePermissions::generatePermissions
