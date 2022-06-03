@@ -37,7 +37,7 @@ class RegistrationPermissions{
    * Returns a list of node permissions for a given node type.
    *
    * @param \Drupal\event_registration\Entity\Registration $type
-   *   The Registration type.
+   *   The Registration Type.
    *
    * @return array
    *   An associative array of permission names and descriptions.

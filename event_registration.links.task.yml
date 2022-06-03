@@ -20,25 +20,3 @@ entity.event_registration.delete_form:
   base_route:  entity.event_registration.canonical
   title: Delete
   weight: 10
-# Registration type routing definition
-
-entity.event_registration_type.canonical:
-  route_name: entity.event_registration_type.canonical
-  base_route: entity.event_registration_type.canonical
-  title: 'View'
-
-entity.event_registration_type.edit_form:
-  route_name: entity.event_registration_type.edit_form
-  base_route: entity.event_registration_type.canonical
-  title: 'Edit'
-
-entity.event_registration_type.version_history:
-  route_name: entity.event_registration_type.version_history
-  base_route: entity.event_registration_type.canonical
-  title: 'Revisions'
-
-entity.event_registration_type.delete_form:
-  route_name:  entity.event_registration_type.delete_form
-  base_route:  entity.event_registration_type.canonical
-  title: Delete
-  weight: 10

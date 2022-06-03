@@ -2,49 +2,72 @@
 
 namespace Drupal\event_registration\Form;
 
-use Drupal\Core\Entity\ContentEntityForm;
+use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Form controller for Registration type edit forms.
- *
- * @ingroup event_registration
+ * Class RegistrationTypeForm.
  */
-class RegistrationTypeForm extends ContentEntityForm {
-
-  /**
-   * The current user account.
-   *
-   * @var \Drupal\Core\Session\AccountProxyInterface
-   */
-  protected $account;
+class RegistrationTypeForm extends EntityForm {
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
-    // Instantiates this form class.
-    $instance = parent::create($container);
-    $instance->account = $container->get('current_user');
-    return $instance;
-  }
+  public function form(array $form, FormStateInterface $form_state) {
+    $form = parent::form($form, $form_state);
 
-  /**
-   * {@inheritdoc}
-   */
-  public function buildForm(array $form, FormStateInterface $form_state) {
-    /* @var \Drupal\event_registration\Entity\RegistrationType $entity */
-    $form = parent::buildForm($form, $form_state);
+    $event_registration_type = $this->entity;
+    $form['label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Label'),
+      '#maxlength' => 255,
+      '#default_value' => $event_registration_type->label(),
+      '#description' => $this->t("Label for the Registration Type."),
+      '#required' => TRUE,
+    ];
 
-    if (!$this->entity->isNew()) {
-      $form['new_revision'] = [
-        '#type' => 'checkbox',
-        '#title' => $this->t('Create new revision'),
-        '#default_value' => FALSE,
-        '#weight' => 10,
-      ];
-    }
+    $form['id'] = [
+      '#type' => 'machine_name',
+      '#default_value' => $event_registration_type->id(),
+      '#machine_name' => [
+        'exists' => '\Drupal\event_registration\Entity\RegistrationType::load',
+      ],
+      '#disabled' => !$event_registration_type->isNew(),
+    ];
+
+    $form['description'] = [
+      '#title' => $this->t('Description'),
+      '#type' => 'textarea',
+      '#default_value' => $event_registration_type->getDescription(),
+    ];
+    
+    $profile_types = $this->entityTypeManager->getStorage('profile_type')->loadMultiple();
+    $profile_options = array_map(function ($profile_type) {
+      return $profile_type->label();
+    }, $profile_types);
+
+    $form['profileType'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Profile Type'),
+      '#description' => $this->t('The target profile type for registration form.'),
+      '#options' => $profile_options,
+      '#default_value' => $event_registration_type->getProfileTypeId(),
+    ];
+    
+    $definitions = $this->entityTypeManager->getDefinitions();
+    $type_options = array_map(function ($definition) {
+      return $definition->getLabel();
+    }, $definitions);
+
+    $form['targetEntityType'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Registerable Entity Type'),
+      '#description' => $this->t('The type of entity that can be registered with this registration type.'),
+      '#options' => $type_options,
+      '#default_value' => $event_registration_type->getTargetEntityTypeId() ?? 'user',
+    ];
+
+    /* You will need additional form elements for your custom properties. */
 
     return $form;
   }
@@ -53,35 +76,22 @@ class RegistrationTypeForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    $entity = $this->entity;
-
-    // Save as a new revision if requested to do so.
-    if (!$form_state->isValueEmpty('new_revision') && $form_state->getValue('new_revision') != FALSE) {
-      $entity->setNewRevision();
-
-      // If a new revision is created, save the current user as revision author.
-      $entity->setRevisionCreationTime($this->time->getRequestTime());
-      $entity->setRevisionUserId($this->account->id());
-    }
-    else {
-      $entity->setNewRevision(FALSE);
-    }
-
-    $status = parent::save($form, $form_state);
+    $event_registration_type = $this->entity;
+    $status = $event_registration_type->save();
 
     switch ($status) {
       case SAVED_NEW:
-        $this->messenger()->addMessage($this->t('Created the %label Registration type.', [
-          '%label' => $entity->label(),
+        $this->messenger()->addMessage($this->t('Created the %label Registration Type.', [
+          '%label' => $event_registration_type->label(),
         ]));
         break;
 
       default:
-        $this->messenger()->addMessage($this->t('Saved the %label Registration type.', [
-          '%label' => $entity->label(),
+        $this->messenger()->addMessage($this->t('Saved the %label Registration Type.', [
+          '%label' => $event_registration_type->label(),
         ]));
     }
-    $form_state->setRedirect('entity.event_registration_type.canonical', ['event_registration_type' => $entity->id()]);
+    $form_state->setRedirectUrl($event_registration_type->toUrl('collection'));
   }
 
 }

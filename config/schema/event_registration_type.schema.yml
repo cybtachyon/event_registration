@@ -1,6 +1,6 @@
-event_registration.event_registration_bundle.*:
+event_registration.event_registration_type.*:
   type: config_entity
-  label: 'Registration type config'
+  label: 'Registration Type config'
   mapping:
     id:
       type: string

@@ -5,4 +5,4 @@ core_version_requirement: ^9
 type: module
 dependencies:
   - event:event
-  - commerce:commerce
+  - profile:profile

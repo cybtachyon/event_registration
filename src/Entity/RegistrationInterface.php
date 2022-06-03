@@ -2,7 +2,7 @@
 
 namespace Drupal\event_registration\Entity;
 
-use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\commerce\Entity\CommerceContentEntityInterface;
 use Drupal\Core\Entity\RevisionLogInterface;
 use Drupal\Core\Entity\EntityChangedInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
@@ -13,7 +13,13 @@ use Drupal\user\EntityOwnerInterface;
  *
  * @ingroup event_registration
  */
-interface RegistrationInterface extends ContentEntityInterface, RevisionLogInterface, EntityChangedInterface, EntityPublishedInterface, EntityOwnerInterface {
+interface RegistrationInterface extends
+  CommerceContentEntityInterface,
+  RevisionLogInterface,
+  EntityChangedInterface,
+  EntityPublishedInterface,
+  EntityOwnerInterface
+{
 
   /**
    * Add get/set methods for your configuration properties here.

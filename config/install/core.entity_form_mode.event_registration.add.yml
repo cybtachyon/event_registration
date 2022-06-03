@@ -1,0 +1,9 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - event_registration
+id: event_registration.add
+label: Add
+targetEntityType: event_registration
+cache: true

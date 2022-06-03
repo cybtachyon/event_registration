@@ -2,23 +2,20 @@
 
 namespace Drupal\event_registration;
 
+use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityListBuilder;
-use Drupal\Core\Link;
 
 /**
- * Defines a class to build a listing of Registration type entities.
- *
- * @ingroup event_registration
+ * Provides a listing of Registration Type entities.
  */
-class RegistrationTypeListBuilder extends EntityListBuilder {
+class RegistrationTypeListBuilder extends ConfigEntityListBuilder {
 
   /**
    * {@inheritdoc}
    */
   public function buildHeader() {
-    $header['id'] = $this->t('Registration type ID');
-    $header['name'] = $this->t('Name');
+    $header['label'] = $this->t('Registration Type');
+    $header['id'] = $this->t('Machine name');
     return $header + parent::buildHeader();
   }
 
@@ -26,13 +23,9 @@ class RegistrationTypeListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-    /* @var \Drupal\event_registration\Entity\RegistrationType $entity */
+    $row['label'] = $entity->label();
     $row['id'] = $entity->id();
-    $row['name'] = Link::createFromRoute(
-      $entity->label(),
-      'entity.event_registration_type.edit_form',
-      ['event_registration_type' => $entity->id()]
-    );
+    // You probably want a few more properties here...
     return $row + parent::buildRow($entity);
   }
 

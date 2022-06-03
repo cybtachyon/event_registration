@@ -3,18 +3,8 @@ entity.event_registration.add_form:
   title: 'Add Registration'
   appears_on:
     - entity.event_registration.collection
-entity.event_registration_bundle.add_form:
-  route_name: entity.event_registration_bundle.add_form
-  title: 'Add Registration type'
-  appears_on:
-    - entity.event_registration_bundle.collection
 entity.event_registration_type.add_form:
-  route_name: entity.event_registration_type.add_page
-  title: 'Add Registration type'
+  route_name: entity.event_registration_type.add_form
+  title: 'Add Registration Type'
   appears_on:
     - entity.event_registration_type.collection
-entity.event_registration_type_bundle.add_form:
-  route_name: entity.event_registration_type_bundle.add_form
-  title: 'Add Registration type type'
-  appears_on:
-    - entity.event_registration_type_bundle.collection

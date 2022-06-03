@@ -37,16 +37,6 @@ function event_registration_theme() {
     'variables' => ['content' => NULL],
     'file' => 'event_registration.page.inc',
   ];
-  $theme['event_registration_type'] = [
-    'render element' => 'elements',
-    'file' => 'event_registration_type.page.inc',
-    'template' => 'event_registration_type',
-  ];
-  $theme['event_registration_type_content_add_list'] = [
-    'render element' => 'content',
-    'variables' => ['content' => NULL],
-    'file' => 'event_registration_type.page.inc',
-  ];
   return $theme;
 }
 
@@ -63,21 +53,5 @@ function event_registration_theme_suggestions_event_registration(array $variable
   $suggestions[] = 'event_registration__' . $entity->bundle() . '__' . $sanitized_view_mode;
   $suggestions[] = 'event_registration__' . $entity->id();
   $suggestions[] = 'event_registration__' . $entity->id() . '__' . $sanitized_view_mode;
-  return $suggestions;
-}
-
-/**
- * Implements hook_theme_suggestions_HOOK().
- */
-function event_registration_theme_suggestions_event_registration_type(array $variables) {
-  $suggestions = [];
-  $entity = $variables['elements']['#event_registration_type'];
-  $sanitized_view_mode = strtr($variables['elements']['#view_mode'], '.', '_');
-
-  $suggestions[] = 'event_registration_type__' . $sanitized_view_mode;
-  $suggestions[] = 'event_registration_type__' . $entity->bundle();
-  $suggestions[] = 'event_registration_type__' . $entity->bundle() . '__' . $sanitized_view_mode;
-  $suggestions[] = 'event_registration_type__' . $entity->id();
-  $suggestions[] = 'event_registration_type__' . $entity->id() . '__' . $sanitized_view_mode;
   return $suggestions;
 }
