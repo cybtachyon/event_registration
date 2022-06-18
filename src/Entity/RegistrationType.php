@@ -3,6 +3,7 @@
 namespace Drupal\event_registration\Entity;
 
 use Drupal\commerce\Entity\CommerceBundleEntityBase;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 
 /**
@@ -24,7 +25,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  *     },
  *   },
  *   config_prefix = "event_registration_type",
- *   admin_permission = "administer site configuration",
+ *   admin_permission = "manager event_registration_type entities",
  *   bundle_of = "event_registration",
  *   entity_keys = {
  *     "id" = "id",
@@ -37,6 +38,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  *     "description",
  *     "targetEntityType",
  *     "profileType",
+ *     "eventTypes",
  *     "traits",
  *     "locked",
  *   },
@@ -71,6 +73,13 @@ class RegistrationType extends CommerceBundleEntityBase implements RegistrationT
    * @var string
    */
   protected $description = '';
+
+  /**
+   * The supported event type IDs.
+   *
+   * @var array
+   */
+  protected $eventTypes = [];
 
   /**
    * The profile type ID.
@@ -114,6 +123,36 @@ class RegistrationType extends CommerceBundleEntityBase implements RegistrationT
   public function setProfileTypeId($profile_type_id) {
     $this->profileType = $profile_type_id;
     return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getEventTypeIds() {
+    return $this->eventTypes;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setEventTypeIds($event_type_ids) {
+    $this->eventTypes = $event_type_ids;
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function addEventTypeId($event_type_id) {
+    if (!in_array($event_type_id, $this->eventTypes)) {
+      $this->eventTypes[] = $event_type_id;
+    }
+    return $this;
+  }
+  
+  public function supportsEventTypeId($event_type_id) {
+    var_export($this->eventTypes);
+    return in_array($event_type_id, $this->eventTypes);
   }
 
   /**

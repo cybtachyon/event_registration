@@ -41,6 +41,20 @@ class RegistrationTypeForm extends EntityForm {
       '#default_value' => $event_registration_type->getDescription(),
     ];
     
+    $event_types = $this->entityTypeManager->getStorage('event_type')->loadMultiple();
+    $event_options = array_map(function ($event_types) {
+      return $event_types->label();
+    }, $event_types);
+
+    $form['eventTypes'] = [
+      '#type' => 'checkboxes',
+      '#multiple' => TRUE,
+      '#title' => $this->t('Event Types'),
+      '#description' => $this->t('The supported event types for this registration type.'),
+      '#options' => $event_options,
+      '#default_value' => $event_registration_type->getEventTypeIds(),
+    ];
+    
     $profile_types = $this->entityTypeManager->getStorage('profile_type')->loadMultiple();
     $profile_options = array_map(function ($profile_type) {
       return $profile_type->label();

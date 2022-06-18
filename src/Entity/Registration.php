@@ -27,11 +27,11 @@ use Drupal\user\UserInterface;
  *     "list_builder" = "Drupal\event_registration\RegistrationListBuilder",
  *     "views_data" = "Drupal\event_registration\Entity\RegistrationViewsData",
  *     "translation" = "Drupal\event_registration\RegistrationTranslationHandler",
- *
  *     "form" = {
  *       "default" = "Drupal\event_registration\Form\RegistrationForm",
  *       "add" = "Drupal\event_registration\Form\RegistrationForm",
  *       "edit" = "Drupal\event_registration\Form\RegistrationForm",
+ *       "register" = "Drupal\event_registration\Form\RegistrationForm",
  *       "delete" = "Drupal\event_registration\Form\RegistrationDeleteForm",
  *     },
  *     "route_provider" = {
@@ -57,17 +57,17 @@ use Drupal\user\UserInterface;
  *     "published" = "status",
  *   },
  *   links = {
- *     "canonical" = "/admin/structure/event/registration/registration/{event_registration}",
- *     "add-page" = "/admin/structure/event/registration/registration/add",
- *     "add-form" = "/admin/structure/event/registration/registration/add/{event_registration_type}",
- *     "edit-form" = "/admin/structure/event/registration/registration/{event_registration}/edit",
- *     "delete-form" = "/admin/structure/event/registration/registration/{event_registration}/delete",
- *     "version-history" = "/admin/structure/event/registration/registration/{event_registration}/revisions",
- *     "revision" = "/admin/structure/event/registration/registration/{event_registration}/revisions/{event_registration_revision}/view",
- *     "revision_revert" = "/admin/structure/event/registration/registration/{event_registration}/revisions/{event_registration_revision}/revert",
- *     "revision_delete" = "/admin/structure/event/registration/registration/{event_registration}/revisions/{event_registration_revision}/delete",
- *     "translation_revert" = "/admin/structure/event/registration/registration/{event_registration}/revisions/{event_registration_revision}/revert/{langcode}",
- *     "collection" = "/admin/structure/event/registration/registration",
+ *     "canonical" = "/event/{event}/registration/{event_registration}",
+ *     "add-page" = "/event/registration/add",
+ *     "add-form" = "/event/registration/add/{event_registration_type}",
+ *     "edit-form" = "/event/{event}/registration/{event_registration}/edit",
+ *     "delete-form" = "/event/{event}/registration/{event_registration}/delete",
+ *     "version-history" = "/event/{event}/registration/{event_registration}/revisions",
+ *     "revision" = "/event/{event}/registration/{event_registration}/revisions/{event_registration_revision}/view",
+ *     "revision_revert" = "/event/{event}/registration/{event_registration}/revisions/{event_registration_revision}/revert",
+ *     "revision_delete" = "/event/{event}/registration/{event_registration}/revisions/{event_registration_revision}/delete",
+ *     "translation_revert" = "/event/{event}/registration/{event_registration}/revisions/{event_registration_revision}/revert/{langcode}",
+ *     "collection" = "/admin/event/registration",
  *   },
  *   revision_metadata_keys = {
  *     "revision_user" = "revision_user",
@@ -99,6 +99,10 @@ class Registration extends CommerceContentEntityBase implements RegistrationInte
    */
   protected function urlRouteParameters($rel) {
     $uri_route_parameters = parent::urlRouteParameters($rel);
+    
+    $event = $this->getEvent();
+    var_export($this->event->referencedEntities());
+    $uri_route_parameters['event'] = $event ? $event->id() : NULL;
 
     if ($rel === 'revision_revert' && $this instanceof RevisionableInterface) {
       $uri_route_parameters[$this->getEntityTypeId() . '_revision'] = $this->getRevisionId();
@@ -385,24 +389,8 @@ class Registration extends CommerceContentEntityBase implements RegistrationInte
    * {@inheritdoc}
    */
   public function getEvent() {
-    $events = $this->getTranslatedReferencedEntities('event');
-    return reset($event);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getRegistrationTicket() {
-    $events = $this->getTranslatedReferencedEntities('registration_type');
-    return reset($event);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getOrderItem() {
-    $events = $this->getTranslatedReferencedEntities('order_item');
-    return reset($event);
+    $events = $this->getTranslatedReferencedEntities('event') ?? [];
+    return reset($events);
   }
 
 }

@@ -6,6 +6,11 @@ administer event_registration entities:
   description: 'Allow to access the administration form to configure Registration entities.'
   restrict access: true
 
+manager event_registration_type entities:
+  title: 'Manage Registration Type entities'
+  description: 'Allow to access the administration form to configure Registration Type entities.'
+  restrict access: true
+
 delete event_registration entities:
   title: 'Delete Registration entities'
 
@@ -28,6 +33,14 @@ revert all event_registration revisions:
 delete all event_registration revisions:
   title: 'Delete all revisions'
   description: 'Role requires permission to <em>view Registration revisions</em> and <em>delete rights</em> for event_registration entities in question or <em>administer event_registration entities</em>.'
+
+register for event:
+  title: 'Register for any Event'
+  description: 'Permission permits the user to register for any event'
+
+access registration overview for any event:
+  title: 'Access Registration Overview for any Event'
+  description: 'Permits access to view the registrations list for an entity.'
 
 permission_callbacks:
   - \Drupal\event_registration\RegistrationPermissions::generatePermissions

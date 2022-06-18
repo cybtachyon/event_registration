@@ -5,7 +5,10 @@
  * Contains event_registration.module.
  */
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\event\Entity\EventInterface;
 
 /**
  * Implements hook_help().
@@ -54,4 +57,28 @@ function event_registration_theme_suggestions_event_registration(array $variable
   $suggestions[] = 'event_registration__' . $entity->id();
   $suggestions[] = 'event_registration__' . $entity->id() . '__' . $sanitized_view_mode;
   return $suggestions;
+}
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function event_registration_entity_type_alter(array &$entity_types) {
+  $entity_types['event']->setLinkTemplate('event-registration-overview', '/event/{event}/registration');
+  $entity_types['event']->setLinkTemplate('event-registration-list', '/event/{event}/registration/list');
+  $entity_types['event']->setLinkTemplate('event-registration-mine', '/event/{event}/registration/mine');
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function event_registration_event_access(EventInterface $event, $operation, AccountInterface $account) {
+  if ($operation == 'register') {
+    $bundle = $event->bundle();
+    $permissions = [
+      'register for any event',
+      'register for ' . $bundle . ' event',
+    ];
+    return AccessResult::allowedIfHasPermissions($account, $permissions, 'OR');
+  }
+  return AccessResult::neutral();
 }
