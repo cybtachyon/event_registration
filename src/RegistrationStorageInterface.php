@@ -2,7 +2,6 @@
 
 namespace Drupal\event_registration;
 
-use Drupal\commerce_order\Entity\OrderItemInterface;
 use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Language\LanguageInterface;
@@ -58,16 +57,5 @@ interface RegistrationStorageInterface extends ContentEntityStorageInterface {
    *   The language object.
    */
   public function clearRevisionsLanguage(LanguageInterface $language);
-
-  /**
-   * Loads registrations linked to an order item.
-   *
-   * @param \Drupal\commerce_order\Entity\OrderItemInterface $order_item
-   *   The referenced Order Item.
-   *
-   * @return \Drupal\event_registration\Entity\RegistrationInterface[]
-   *   The related registrations.
-   */
-  public function getRegistrationsForOrderItem(OrderItemInterface $order_item);
 
 }

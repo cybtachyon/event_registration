@@ -6,7 +6,12 @@ administer event_registration entities:
   description: 'Allow to access the administration form to configure Registration entities.'
   restrict access: true
 
-manager event_registration_type entities:
+Access event_registration overview page:
+  title: 'Access Event Registration Overview Page'
+  description: 'Allow to access the admin listing of all event registrations.'
+  restrict access: true
+
+manage event_registration_type entities:
   title: 'Manage Registration Type entities'
   description: 'Allow to access the administration form to configure Registration Type entities.'
   restrict access: true
@@ -40,6 +45,10 @@ register for event:
 
 access registration overview for any event:
   title: 'Access Registration Overview for any Event'
+  description: 'Permits access to view the registrations overview page for an entity.'
+
+access registration list for any event:
+  title: 'Access Registration List for any Event'
   description: 'Permits access to view the registrations list for an entity.'
 
 permission_callbacks:

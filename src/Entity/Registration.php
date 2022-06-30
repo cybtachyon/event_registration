@@ -2,7 +2,7 @@
 
 namespace Drupal\event_registration\Entity;
 
-use Drupal\commerce\Entity\CommerceContentEntityBase;
+use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Entity\RevisionableInterface;
@@ -60,6 +60,7 @@ use Drupal\user\UserInterface;
  *     "canonical" = "/event/{event}/registration/{event_registration}",
  *     "add-page" = "/event/registration/add",
  *     "add-form" = "/event/registration/add/{event_registration_type}",
+ *     "register" = "/event/{event}/registration/{event_registration_type}/register",
  *     "edit-form" = "/event/{event}/registration/{event_registration}/edit",
  *     "delete-form" = "/event/{event}/registration/{event_registration}/delete",
  *     "version-history" = "/event/{event}/registration/{event_registration}/revisions",
@@ -78,11 +79,52 @@ use Drupal\user\UserInterface;
  *   field_ui_base_route = "entity.event_registration_type.edit_form"
  * )
  */
-class Registration extends CommerceContentEntityBase implements RegistrationInterface {
+class Registration extends ContentEntityBase implements RegistrationInterface {
 
   use EntityChangedTrait;
   use EntityPublishedTrait;
   use RevisionLogEntityTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTranslatedReferencedEntities($field_name) {
+    $referenced_entities = $this->get($field_name)->referencedEntities();
+    return $this->ensureTranslations($referenced_entities);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTranslatedReferencedEntity($field_name) {
+    $referenced_entities = $this->getTranslatedReferencedEntities($field_name);
+    $referenced_entity = reset($referenced_entities);
+    return $referenced_entity ?: NULL;
+  }
+
+  /**
+   * Ensures entities are in the current entity's language, if possible.
+   *
+   * @param \Drupal\Core\Entity\ContentEntityInterface[] $entities
+   *   The entities to process.
+   *
+   * @return \Drupal\Core\Entity\ContentEntityInterface[]
+   *   The processed entities.
+   */
+  protected function ensureTranslations(array $entities) {
+    if ($this->isTranslatable()) {
+      $langcode = $this->language()->getId();
+    }
+    else {
+      $langcode = $this->languageManager()->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)->getId();
+    }
+    foreach ($entities as $index => $entity) {
+      /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
+      $entities[$index] = ($entity->hasTranslation($langcode)) ? $entity->getTranslation($langcode) : $entity;
+    }
+
+    return $entities;
+  }
 
   /**
    * {@inheritdoc}
@@ -101,7 +143,6 @@ class Registration extends CommerceContentEntityBase implements RegistrationInte
     $uri_route_parameters = parent::urlRouteParameters($rel);
     
     $event = $this->getEvent();
-    var_export($this->event->referencedEntities());
     $uri_route_parameters['event'] = $event ? $event->id() : NULL;
 
     if ($rel === 'revision_revert' && $this instanceof RevisionableInterface) {
@@ -204,6 +245,11 @@ class Registration extends CommerceContentEntityBase implements RegistrationInte
 
     // Add the revision metadata fields.
     $fields += static::revisionLogBaseFieldDefinitions($entity_type);
+    $fields['revision_log_message']
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('form', [
+        'region' => 'hidden',
+      ]);
 
     // Add the published field.
     $fields += static::publishedBaseFieldDefinitions($entity_type);
@@ -221,14 +267,7 @@ class Registration extends CommerceContentEntityBase implements RegistrationInte
         'weight' => 0,
       ])
       ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'weight' => 5,
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => '60',
-          'autocomplete_type' => 'tags',
-          'placeholder' => '',
-        ],
+        'region' => 'hidden',
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
@@ -255,7 +294,9 @@ class Registration extends CommerceContentEntityBase implements RegistrationInte
       ->setDisplayConfigurable('view', TRUE)
       ->setRequired(TRUE);
 
-    $fields['status']->setDescription(t('A boolean indicating whether the Registration is published.'))
+    $fields['status']
+      ->setLabel(t('Active'))
+      ->setDescription(t('A boolean indicating whether the Registration is active.'))
       ->setDisplayOptions('form', [
         'type' => 'boolean_checkbox',
         'weight' => -3,
@@ -305,17 +346,8 @@ class Registration extends CommerceContentEntityBase implements RegistrationInte
       ->setRevisionable(TRUE)
       ->setSetting('target_type', 'profile')
       ->setSetting('handler', 'default')
-      ->setDisplayOptions('view', [
-        'label' => 'above',
-        'type' => 'label',
-        'weight' => 0,
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'inline_entity_form',
-        'weight' => 5,
-      ])
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('view', FALSE);
 
     $fields['registered_entity'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Registered Entity'))
@@ -347,7 +379,7 @@ class Registration extends CommerceContentEntityBase implements RegistrationInte
    * {@inheritdoc}
    */
   public static function bundleFieldDefinitions(EntityTypeInterface $entity_type, $bundle, array $base_field_definitions) {
-    /** @var \Drupal\commerce_order\Entity\OrderItemTypeInterface $order_item_type */
+    /** @var \Drupal\event_registration\Entity\RegistrationTypeInterface $registration_type */
     $registration_type = RegistrationType::load($bundle);
     if (!$registration_type) {
       throw new \RuntimeException(sprintf('Could not load the "%s" order item type.', $bundle));
@@ -377,6 +409,11 @@ class Registration extends CommerceContentEntityBase implements RegistrationInte
       $fields['profile']->setDisplayOptions('form', [
         'type' => 'string_textfield',
         'weight' => -1,
+      ]);
+      $fields['profile']->setDisplayOptions('view', [
+        'label' => 'above',
+        'type' => 'label',
+        'weight' => 0,
       ]);
       $fields['profile']->setDisplayConfigurable('form', TRUE);
       $fields['profile']->setDisplayConfigurable('view', TRUE);

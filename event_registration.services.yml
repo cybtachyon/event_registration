@@ -1,0 +1,5 @@
+services:
+    event_registration.registration_manager:
+        class: Drupal\event_registration\RegistrationManager
+        arguments:
+            - '@entity_type.manager'

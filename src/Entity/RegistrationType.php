@@ -2,7 +2,6 @@
 
 namespace Drupal\event_registration\Entity;
 
-use Drupal\commerce\Entity\CommerceBundleEntityBase;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 
@@ -39,7 +38,6 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  *     "targetEntityType",
  *     "profileType",
  *     "eventTypes",
- *     "traits",
  *     "locked",
  *   },
  *   links = {
@@ -47,11 +45,12 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  *     "add-form" = "/admin/structure/event/registration/registration/bundle/add",
  *     "edit-form" = "/admin/structure/event/registration/registration/bundle/{event_registration_type}/edit",
  *     "delete-form" = "/admin/structure/event/registration/registration/bundle/{event_registration_type}/delete",
+ *     "register" = "/event/{event}/registration/{event_registration_type}/register",
  *     "collection" = "/admin/structure/event/registration/registration/bundle"
  *   }
  * )
  */
-class RegistrationType extends CommerceBundleEntityBase implements RegistrationTypeInterface {
+class RegistrationType extends ConfigEntityBundleBase implements RegistrationTypeInterface {
 
   /**
    * The Registration type ID.
@@ -94,6 +93,13 @@ class RegistrationType extends CommerceBundleEntityBase implements RegistrationT
    * @var string
    */
   protected $targetEntityType = NULL;
+
+  /**
+   * Whether the bundle is locked, indicating that it cannot be deleted.
+   *
+   * @var bool
+   */
+  protected $locked = FALSE;
 
   /**
    * {@inheritdoc}
@@ -151,7 +157,6 @@ class RegistrationType extends CommerceBundleEntityBase implements RegistrationT
   }
   
   public function supportsEventTypeId($event_type_id) {
-    var_export($this->eventTypes);
     return in_array($event_type_id, $this->eventTypes);
   }
 
@@ -167,6 +172,29 @@ class RegistrationType extends CommerceBundleEntityBase implements RegistrationT
    */
   public function setTargetEntityTypeId($target_entity_type_id) {
     $this->targetEntityType = $target_entity_type_id;
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isLocked() {
+    return (bool) $this->locked;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function lock() {
+    $this->locked = TRUE;
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function unlock() {
+    $this->locked = FALSE;
     return $this;
   }
 

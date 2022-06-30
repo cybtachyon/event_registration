@@ -2,7 +2,6 @@
 
 namespace Drupal\event_registration;
 
-use Drupal\commerce_order\Entity\OrderItemInterface;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Language\LanguageInterface;
@@ -53,15 +52,6 @@ class RegistrationStorage extends SqlContentEntityStorage implements Registratio
     return $this->database->update('event_registration_revision')
       ->fields(['langcode' => LanguageInterface::LANGCODE_NOT_SPECIFIED])
       ->condition('langcode', $language->getId())
-      ->execute();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getRegistrationsForOrderItem(OrderItemInterface $order_item) {
-    return $this->getQuery()
-      ->condition('order_item', $order_item->id())
       ->execute();
   }
 

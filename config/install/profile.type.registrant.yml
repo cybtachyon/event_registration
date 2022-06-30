@@ -12,6 +12,4 @@ registration: false
 roles: {  }
 allow_revisions: false
 new_revision: false
-third_party_settings:
-  commerce_order:
-    customer_profile_type: true
+third_party_settings: {  }

@@ -4,6 +4,9 @@ namespace Drupal\event_registration\Form;
 
 use Drupal\Core\Entity\ContentEntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\event\Entity\EventInterface;
+use Drupal\event_registration\Entity\RegistrationTypeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -28,6 +31,44 @@ class RegistrationForm extends ContentEntityForm {
     $instance = parent::create($container);
     $instance->account = $container->get('current_user');
     return $instance;
+  }
+
+  /**
+   * Displays a Registration revision.
+   *
+   * @param int $event_registration_revision
+   *   The Registration revision ID.
+   *
+   * @return array
+   *   An array suitable for drupal_render().
+   */
+  public function registerTitle(EventInterface $event, RegistrationTypeInterface $event_registration_type) {
+    return $this->t('Register as %type for %event', [
+      '%event' => $event->label(),
+      '%type' => $event_registration_type->label(),
+    ]);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getEntityFromRouteMatch(RouteMatchInterface $route_match, $entity_type_id) {
+    if ($route_match->getRawParameter('event_registration') !== NULL) {
+      $entity = $route_match->getParameter('event_registration');
+    }
+    else {
+      /** @var \Drupal\event\Entity\EventInterface $event */
+      $event = $route_match->getParameter('event');
+      /** @var \Drupal\event_registration\Entity\RegistrationTypeInterface $event_registration_type */
+      $event_registration_type = $route_match->getParameter('event_registration_type');
+      $values = [
+        'type' => $event_registration_type->id(),
+        'event' => $event->id(),
+      ];
+      $entity = $this->entityTypeManager->getStorage('event_registration')->create($values);
+    }
+
+    return $entity;
   }
 
   /**
@@ -81,7 +122,11 @@ class RegistrationForm extends ContentEntityForm {
           '%label' => $entity->label(),
         ]));
     }
-    $form_state->setRedirect('entity.event_registration.canonical', ['event_registration' => $entity->id()]);
+    $event = $entity->getEvent();
+    $form_state->setRedirect('entity.event_registration.canonical', [
+      'event' => $event ? $event->id() : NULL,
+      'event_registration' => $entity->id(),
+    ]);
   }
 
 }

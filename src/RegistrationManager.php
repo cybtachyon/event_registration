@@ -50,7 +50,6 @@ class RegistrationManager implements RegistrationManagerInterface {
     $registration_type_storage = $this->entityTypeManager->getStorage('event_registration_type');
     $registration_types = $registration_type_storage->loadMultiple();
     $event_type_id = $event->bundle();
-    var_export($registration_types);
 
     return array_filter($registration_types, function ($registration_type) use ($event_type_id) {
       return $registration_type->supportsEventTypeId($event_type_id);

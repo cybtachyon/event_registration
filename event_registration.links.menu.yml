@@ -1,3 +1,16 @@
+# Registration Type menu items definition
+entity.event_registration_type.collection:
+  title: 'Registration Types'
+  route_name: entity.event_registration_type.collection
+  description: 'List Registration Type (bundles)'
+  parent: system.admin_structure# Registration Type menu items definition
+
+entity.event_registration_type.add_form:
+  title: 'Add Registration Type'
+  route_name: entity.event_registration_type.add_form
+  description: 'List Event Registration Types (bundles)'
+  parent: entity.event_registration_type.collection
+
 # Registration menu items definition
 entity.event_registration.collection:
   title: 'Registrations'
@@ -5,11 +18,3 @@ entity.event_registration.collection:
   description: 'List Registration entities'
   parent: event.menu_links:event_page
   weight: -1
-
-# Registration Type menu items definition
-entity.event_registration_type.collection:
-  title: 'Registration Types'
-  route_name: entity.event_registration_type.collection
-  description: 'List Registration Type (bundles)'
-  parent: system.admin_structure
-  weight: 99

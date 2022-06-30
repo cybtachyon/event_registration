@@ -2,7 +2,7 @@
 
 namespace Drupal\event_registration\Entity;
 
-use Drupal\commerce\Entity\CommerceContentEntityInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\RevisionLogInterface;
 use Drupal\Core\Entity\EntityChangedInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
@@ -14,7 +14,7 @@ use Drupal\user\EntityOwnerInterface;
  * @ingroup event_registration
  */
 interface RegistrationInterface extends
-  CommerceContentEntityInterface,
+  ContentEntityInterface,
   RevisionLogInterface,
   EntityChangedInterface,
   EntityPublishedInterface,
@@ -22,8 +22,26 @@ interface RegistrationInterface extends
 {
 
   /**
-   * Add get/set methods for your configuration properties here.
+   * Gets the translations of an entity reference field.
+   *
+   * @param string $field_name
+   *   The entity reference field name.
+   *
+   * @return \Drupal\Core\Entity\ContentEntityInterface[]
+   *   The translated entities.
    */
+  public function getTranslatedReferencedEntities($field_name);
+
+  /**
+   * Gets the translation of a referenced entity.
+   *
+   * @param string $field_name
+   *   The entity reference field name.
+   *
+   * @return \Drupal\Core\Entity\ContentEntityInterface|null
+   *   The translated entity, or NULL if not found.
+   */
+  public function getTranslatedReferencedEntity($field_name);
 
   /**
    * Gets the Registration name.

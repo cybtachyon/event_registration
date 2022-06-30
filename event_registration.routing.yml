@@ -1,0 +1,39 @@
+event_registration.event.registration:
+  path: '/event/{event}/registration'
+  defaults:
+    _controller: '\Drupal\event_registration\Controller\EventRegistrationController::overview'
+    _title_callback: '\Drupal\event_registration\Controller\EventRegistrationController::overviewTitle'
+  options:
+    parameters:
+      event:
+        type: 'entity:event'
+  requirements:
+    _permission: 'access registration overview for any event'
+
+event_registration.event.registration_list:
+
+  path: '/event/{event}/registration/list'
+  defaults:
+    _entity_list: 'event_registration'
+    _title_callback: '\Drupal\event_registration\Controller\EventRegistrationController::listTitle'
+  options:
+    parameters:
+      event:
+        type: 'entity:event'
+  requirements:
+    _permission: 'access registration list for any event'
+
+entity.event_registration.register:
+  path: '/event/{event}/registration/{event_registration_type}/register'
+  defaults:
+    _entity_form: event_registration.register
+    _title_callback: '\Drupal\event_registration\Form\RegistrationForm::registerTitle'
+  options:
+    parameters:
+      event:
+        type: 'entity:event'
+      event_registration_type:
+        type: 'entity:event_registration_type'
+  requirements:
+    _permission: 'register for any event'
+

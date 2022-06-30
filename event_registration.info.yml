@@ -1,5 +1,5 @@
 name: Event Registration
-description: Event Registration for Drupal Commerce
+description: Event Registration and Management
 package: Event
 core_version_requirement: ^9
 type: module
