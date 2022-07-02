@@ -8,10 +8,9 @@ event_registration.event.registration:
       event:
         type: 'entity:event'
   requirements:
-    _permission: 'access registration overview for any event'
+    _permission: 'access event_registration overview for any event'
 
 event_registration.event.registration_list:
-
   path: '/event/{event}/registration/list'
   defaults:
     _entity_list: 'event_registration'
@@ -21,7 +20,7 @@ event_registration.event.registration_list:
       event:
         type: 'entity:event'
   requirements:
-    _permission: 'access registration list for any event'
+    _permission: 'access event_registration list for any event'
 
 entity.event_registration.register:
   path: '/event/{event}/registration/{event_registration_type}/register'

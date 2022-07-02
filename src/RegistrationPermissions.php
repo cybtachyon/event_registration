@@ -112,10 +112,10 @@ class RegistrationPermissions {
       "register for $event_type_id event" => [
         'title' => $this->t('Register for %event_type_name events', $event_type_params),
       ],
-      "access registration overview for $event_type_id event" => [
+      "access event_registration overview for $event_type_id event" => [
         'title' => $this->t('Access Registration Overview page for %event_type_name Event', $event_type_params),
       ],
-      "access registration list for $event_type_id event" => [
+      "access event_registration list for $event_type_id event" => [
         'title' => $this->t('Access Registration List for %event_type_name Event', $event_type_params),
       ],
     ];

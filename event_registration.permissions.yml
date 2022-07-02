@@ -43,11 +43,11 @@ register for event:
   title: 'Register for any Event'
   description: 'Permission permits the user to register for any event'
 
-access registration overview for any event:
+access event_registration overview for any event:
   title: 'Access Registration Overview for any Event'
   description: 'Permits access to view the registrations overview page for an entity.'
 
-access registration list for any event:
+access event_registration list for any event:
   title: 'Access Registration List for any Event'
   description: 'Permits access to view the registrations list for an entity.'
 
