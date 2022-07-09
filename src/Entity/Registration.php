@@ -74,7 +74,7 @@ use Drupal\user\UserInterface;
  *     "revision_revert" = "/event/{event}/registration/{event_registration}/revisions/{event_registration_revision}/revert",
  *     "revision_delete" = "/event/{event}/registration/{event_registration}/revisions/{event_registration_revision}/delete",
  *     "translation_revert" = "/event/{event}/registration/{event_registration}/revisions/{event_registration_revision}/revert/{langcode}",
- *     "collection" = "/admin/event/registration",
+ *     "collection" = "/admin/content/events/registrations",
  *   },
  *   bundle_entity_type = "event_registration_type",
  *   field_ui_base_route = "entity.event_registration_type.edit_form"

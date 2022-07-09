@@ -498,7 +498,7 @@ display:
       access:
         type: perm
         options:
-          perm: 'Access event_registration overview page'
+          perm: 'access event_registration list for any event'
       cache:
         type: tag
         options: {  }
@@ -516,7 +516,23 @@ display:
             value: 'There are no event registrations.'
             format: basic_html
           tokenize: false
-      sorts: {  }
+      sorts:
+        created:
+          id: created
+          table: event_registration_field_data
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: event_registration
+          entity_field: created
+          plugin_id: date
+          order: DESC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+          granularity: second
       arguments: {  }
       filters:
         status:
@@ -658,14 +674,73 @@ display:
         - url.query_args
         - user.permissions
       tags: {  }
-  page_1:
-    id: page_1
-    display_title: Page
+  event_registrations:
+    id: event_registrations
+    display_title: 'Event Registrations'
+    display_plugin: page
+    position: 2
+    display_options:
+      arguments:
+        event:
+          id: event
+          table: event_registration_field_data
+          field: event
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: event_registration
+          entity_field: event
+          plugin_id: numeric
+          default_action: 'not found'
+          exception:
+            value: all
+            title_enable: false
+            title: All
+          title_enable: true
+          title: '{{ arguments.event }} Registrations'
+          default_argument_type: fixed
+          default_argument_options:
+            argument: ''
+          default_argument_skip_url: false
+          summary_options:
+            base_path: ''
+            count: true
+            override: false
+            items_per_page: 25
+          summary:
+            sort_order: asc
+            number_of_records: 0
+            format: default_summary
+          specify_validation: false
+          validate:
+            type: none
+            fail: 'not found'
+          validate_options: {  }
+          break_phrase: false
+          not: false
+      defaults:
+        arguments: false
+      display_description: 'Event Registrations for an event.'
+      display_extenders: {  }
+      path: event/%event/registration/list
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - user.permissions
+      tags: {  }
+  event_registrations_list:
+    id: event_registrations_list
+    display_title: 'Event Registrations Admin List'
     display_plugin: page
     position: 1
     display_options:
+      display_description: 'Admin Event Registrations list page.'
       display_extenders: {  }
-      path: admin/event/registration
+      path: admin/content/events/registrations
     cache_metadata:
       max-age: -1
       contexts:
