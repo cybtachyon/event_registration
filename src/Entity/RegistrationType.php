@@ -140,7 +140,7 @@ class RegistrationType extends ConfigEntityBundleBase implements RegistrationTyp
   /**
    * {@inheritdoc}
    */
-  public function setEventTypeIds($event_type_ids) {
+  public function setEventTypeIds(array $event_type_ids) {
     $this->eventTypes = $event_type_ids;
     return $this;
   }
@@ -156,7 +156,7 @@ class RegistrationType extends ConfigEntityBundleBase implements RegistrationTyp
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function supportsEventTypeId($event_type_id) {
     return in_array($event_type_id, $this->eventTypes);

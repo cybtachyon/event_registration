@@ -81,6 +81,22 @@ interface RegistrationInterface extends
   public function setCreatedTime($timestamp);
 
   /**
+   * Get the registered entity.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface
+   *   The registered entity instance.
+   */
+  public function getRegisteredEntity();
+
+  /**
+   * Get the registration type entity instance.
+   *
+   * @return \Drupal\event_registration\Entity\RegistrationTypeInterface
+   *   The type instance.
+   */
+  public function getRegistrationType();
+
+  /**
    * Gets the Registration revision creation timestamp.
    *
    * @return int

@@ -2,13 +2,12 @@
 
 namespace Drupal\event_registration;
 
-use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\event\Entity\EventInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
- *
+ * Implements registration manager service.
  */
 class RegistrationManager implements RegistrationManagerInterface {
 
@@ -30,30 +29,7 @@ class RegistrationManager implements RegistrationManagerInterface {
   }
 
   /**
-   *
-   */
-  public function canRegisterFor(EventInterface $event, AccountInterface $account) {
-    if ($event->isPublished()) {
-      $bundle = $event->bundle();
-
-      $permissions = [
-        'register for any event',
-        'register for ' . $bundle . ' event',
-      ];
-      foreach ($permissions as $permission) {
-        if ($account->hasPermission($permission)) {
-          $available_types = $this->getAvailableRegistrationTypes($event, $account);
-          if (!empty(available_types)) {
-            return AccessResult::allowed();
-          }
-        }
-      }
-    }
-    return AccessResult::neutral();
-  }
-
-  /**
-   *
+   * {@inheritdoc}
    */
   public function getEnabledRegistrationTypes(EventInterface $event) {
     $registration_type_storage = $this->entityTypeManager->getStorage('event_registration_type');
@@ -66,7 +42,7 @@ class RegistrationManager implements RegistrationManagerInterface {
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function getAvailableRegistrationTypes(EventInterface $event, AccountInterface $account) {
     $event_registration_types = $this->getEnabledRegistrationTypes($event);
@@ -77,18 +53,6 @@ class RegistrationManager implements RegistrationManagerInterface {
       return $account->hasPermission("register $registration_type_id for $event_type_id event")
         || $account->hasPermission("register $registration_type_id for event");
     });
-  }
-
-  /**
-   *
-   */
-  public function getEventRegistrations(EventInterface $event) {
-    $registration_storage = $this->entityTypeManager->getStorage('event_registration');
-    $query = $registration_storage->getQuery();
-    $query->condition('event', $event->id());
-
-    $registration_ids = $query->execute();
-    return $registration_storage->loadMultiple($registration_ids);
   }
 
 }
