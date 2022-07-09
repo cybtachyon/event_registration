@@ -10,6 +10,7 @@ use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityPublishedTrait;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\RevisionLogEntityTrait;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\user\UserInterface;
 
 /**
@@ -56,6 +57,11 @@ use Drupal\user\UserInterface;
  *     "langcode" = "langcode",
  *     "published" = "status",
  *   },
+ *   revision_metadata_keys = {
+ *     "revision_user" = "revision_user",
+ *     "revision_created" = "revision_created",
+ *     "revision_log_message" = "revision_log_message",
+ *   },
  *   links = {
  *     "canonical" = "/event/{event}/registration/{event_registration}",
  *     "add-page" = "/event/registration/add",
@@ -69,11 +75,6 @@ use Drupal\user\UserInterface;
  *     "revision_delete" = "/event/{event}/registration/{event_registration}/revisions/{event_registration_revision}/delete",
  *     "translation_revert" = "/event/{event}/registration/{event_registration}/revisions/{event_registration_revision}/revert/{langcode}",
  *     "collection" = "/admin/event/registration",
- *   },
- *   revision_metadata_keys = {
- *     "revision_user" = "revision_user",
- *     "revision_created" = "revision_created",
- *     "revision_log_message" = "revision_log_message",
  *   },
  *   bundle_entity_type = "event_registration_type",
  *   field_ui_base_route = "entity.event_registration_type.edit_form"
@@ -141,7 +142,7 @@ class Registration extends ContentEntityBase implements RegistrationInterface {
    */
   protected function urlRouteParameters($rel) {
     $uri_route_parameters = parent::urlRouteParameters($rel);
-    
+
     $event = $this->getEvent();
     $uri_route_parameters['event'] = $event ? $event->id() : NULL;
 
@@ -175,6 +176,11 @@ class Registration extends ContentEntityBase implements RegistrationInterface {
     if (!$this->getRevisionUser()) {
       $this->setRevisionUserId($this->getOwnerId());
     }
+  }
+
+  public function getRegistrationType() {
+    $type_storage = $this->entityTypeManager()->getStorage('event_registration_type');
+    return $type_storage->load($this->bundle());
   }
 
   /**
@@ -235,6 +241,11 @@ class Registration extends ContentEntityBase implements RegistrationInterface {
   public function setOwner(UserInterface $account) {
     $this->set('user_id', $account->id());
     return $this;
+  }
+
+  public function getRegisteredEntity() {
+    $entities = $this->get('registered_entity')->referencedEntities();
+    return reset($entities);
   }
 
   /**
@@ -361,13 +372,9 @@ class Registration extends ContentEntityBase implements RegistrationInterface {
         'weight' => 0,
       ])
       ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
+        'type' => 'options_select',
         'weight' => 5,
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => '60',
-          'placeholder' => '',
-        ],
+        'settings' => [],
       ])
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
@@ -426,8 +433,7 @@ class Registration extends ContentEntityBase implements RegistrationInterface {
    * {@inheritdoc}
    */
   public function getEvent() {
-    $events = $this->getTranslatedReferencedEntities('event') ?? [];
-    return reset($events);
+    return $this->getTranslatedReferencedEntity('event');
   }
 
 }

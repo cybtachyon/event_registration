@@ -87,6 +87,9 @@ class RegistrationPermissions {
         'title' => $this->t('Delete %type_name revisions', $type_params),
         'description' => $this->t('To delete a revision, you also need permission to delete the entity item.'),
       ],
+      "register $type_id for any event" => [
+        'title' => $this->t('Register as %registration_type_name for any events', $type_params),
+      ],
     ];
   }
   
