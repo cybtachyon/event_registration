@@ -92,7 +92,12 @@ class RegistrationController extends ControllerBase implements ContainerInjectio
     $langname = $event_registration->language()->getName();
     $languages = $event_registration->getTranslationLanguages();
     $has_translations = (count($languages) > 1);
-    $build['#title'] = $has_translations ? $this->t('@langname revisions for %title', ['@langname' => $langname, '%title' => $event_registration->label()]) : $this->t('Revisions for %title', ['%title' => $event_registration->label()]);
+    $build['#title'] = $has_translations ? $this->t('@langname revisions for %title', [
+      '@langname' => $langname,
+      '%title' => $event_registration->label(),
+    ]) : $this->t('Revisions for %title', [
+      '%title' => $event_registration->label(),
+    ]);
 
     $header = [$this->t('Revision'), $this->t('Operations')];
     $revert_permission = (($account->hasPermission("revert all event_registration revisions") || $account->hasPermission('administer event_registration entities')));

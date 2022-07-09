@@ -4,7 +4,6 @@ namespace Drupal\event_registration;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
-use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Link;
@@ -66,8 +65,8 @@ class RegistrationListBuilder extends EntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-    /* @var \Drupal\event_registration\Entity\RegistrationInterface $entity */
-    /* @var \Drupal\event_registration\Entity\RegistrationTypeInterface $typpe */
+    /** @var \Drupal\event_registration\Entity\RegistrationInterface $entity */
+    /** @var \Drupal\event_registration\Entity\RegistrationTypeInterface $typpe */
     $type = reset($entity->get('type')->referencedEntities());
     $row['id'] = $entity->id();
     $row['name'] = Link::fromTextAndUrl(
@@ -77,17 +76,17 @@ class RegistrationListBuilder extends EntityListBuilder {
     $row['type'] = $type ? $type->label() : $entity->bundle();
     return $row + parent::buildRow($entity);
   }
- 
+
   /**
    * {@inheritdoc}
-   */ 
+   */
   protected function getEntityIds() {
     $query = $this
       ->getStorage()
       ->getQuery()
       ->sort($this->entityType
-      ->getKey('id'));
-      
+        ->getKey('id'));
+
     if ($this->event) {
       $query->condition('event', $this->event->id());
     }

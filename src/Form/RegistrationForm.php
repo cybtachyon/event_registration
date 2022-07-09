@@ -36,8 +36,10 @@ class RegistrationForm extends ContentEntityForm {
   /**
    * Displays a Registration revision.
    *
-   * @param int $event_registration_revision
-   *   The Registration revision ID.
+   * @param \Drupal\event\Entity\EventInterface $event
+   *   The parent event.
+   * @param \Drupal\event\Entity\RegistrationTypeInterface $event_registration_type
+   *   The Registration type.
    *
    * @return array
    *   An array suitable for drupal_render().
@@ -75,7 +77,7 @@ class RegistrationForm extends ContentEntityForm {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    /* @var \Drupal\event_registration\Entity\Registration $entity */
+    /** @var \Drupal\event_registration\Entity\Registration $entity */
     $form = parent::buildForm($form, $form_state);
 
     if (!$this->entity->isNew()) {

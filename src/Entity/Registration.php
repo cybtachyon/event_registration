@@ -178,6 +178,9 @@ class Registration extends ContentEntityBase implements RegistrationInterface {
     }
   }
 
+  /**
+   *
+   */
   public function getRegistrationType() {
     $type_storage = $this->entityTypeManager()->getStorage('event_registration_type');
     return $type_storage->load($this->bundle());
@@ -243,6 +246,9 @@ class Registration extends ContentEntityBase implements RegistrationInterface {
     return $this;
   }
 
+  /**
+   *
+   */
   public function getRegisteredEntity() {
     $entities = $this->get('registered_entity')->referencedEntities();
     return reset($entities);

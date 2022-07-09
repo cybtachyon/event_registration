@@ -14,12 +14,11 @@ use Drupal\user\EntityOwnerInterface;
  * @ingroup event_registration
  */
 interface RegistrationInterface extends
-  ContentEntityInterface,
-  RevisionLogInterface,
-  EntityChangedInterface,
-  EntityPublishedInterface,
-  EntityOwnerInterface
-{
+    ContentEntityInterface,
+    RevisionLogInterface,
+    EntityChangedInterface,
+    EntityPublishedInterface,
+    EntityOwnerInterface {
 
   /**
    * Gets the translations of an entity reference field.

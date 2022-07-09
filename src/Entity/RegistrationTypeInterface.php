@@ -33,4 +33,5 @@ interface RegistrationTypeInterface extends ConfigEntityInterface, EntityDescrip
    * @return $this
    */
   public function unlock();
+
 }

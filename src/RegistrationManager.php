@@ -7,6 +7,9 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\event\Entity\EventInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
+/**
+ *
+ */
 class RegistrationManager implements RegistrationManagerInterface {
 
   /**
@@ -26,6 +29,9 @@ class RegistrationManager implements RegistrationManagerInterface {
     $this->entityTypeManager = $entity_type_manager;
   }
 
+  /**
+   *
+   */
   public function canRegisterFor(EventInterface $event, AccountInterface $account) {
     if ($event->isPublished()) {
       $bundle = $event->bundle();
@@ -46,6 +52,9 @@ class RegistrationManager implements RegistrationManagerInterface {
     return AccessResult::neutral();
   }
 
+  /**
+   *
+   */
   public function getEnabledRegistrationTypes(EventInterface $event) {
     $registration_type_storage = $this->entityTypeManager->getStorage('event_registration_type');
     $registration_types = $registration_type_storage->loadMultiple();
@@ -56,6 +65,9 @@ class RegistrationManager implements RegistrationManagerInterface {
     });
   }
 
+  /**
+   *
+   */
   public function getAvailableRegistrationTypes(EventInterface $event, AccountInterface $account) {
     $event_registration_types = $this->getEnabledRegistrationTypes($event);
 
@@ -67,6 +79,9 @@ class RegistrationManager implements RegistrationManagerInterface {
     });
   }
 
+  /**
+   *
+   */
   public function getEventRegistrations(EventInterface $event) {
     $registration_storage = $this->entityTypeManager->getStorage('event_registration');
     $query = $registration_storage->getQuery();

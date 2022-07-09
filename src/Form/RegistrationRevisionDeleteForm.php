@@ -65,7 +65,9 @@ class RegistrationRevisionDeleteForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getCancelUrl() {
-    return new Url('entity.event_registration.version_history', ['event_registration' => $this->revision->id()]);
+    return new Url('entity.event_registration.version_history', [
+      'event_registration' => $this->revision->id(),
+    ]);
   }
 
   /**
@@ -91,13 +93,23 @@ class RegistrationRevisionDeleteForm extends ConfirmFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->RegistrationStorage->deleteRevision($this->revision->getRevisionId());
 
-    $this->logger('content')->notice('Registration: deleted %title revision %revision.', ['%title' => $this->revision->label(), '%revision' => $this->revision->getRevisionId()]);
-    $this->messenger()->addMessage(t('Revision from %revision-date of Registration %title has been deleted.', ['%revision-date' => \Drupal::service('date.formatter')->format($this->revision->getRevisionCreationTime()), '%title' => $this->revision->label()]));
+    $this->logger('content')->notice('Registration: deleted %title revision %revision.', [
+      '%title' => $this->revision->label(),
+      '%revision' => $this->revision->getRevisionId(),
+    ]);
+    $this->messenger()->addMessage(t('Revision from %revision-date of Registration %title has been deleted.', [
+      '%revision-date' => \Drupal::service('date.formatter')->format($this->revision->getRevisionCreationTime()),
+      '%title' => $this->revision->label(),
+    ]));
     $form_state->setRedirect(
       'entity.event_registration.canonical',
-       ['event_registration' => $this->revision->id()]
+       [
+         'event_registration' => $this->revision->id(),
+       ]
     );
-    if ($this->connection->query('SELECT COUNT(DISTINCT vid) FROM {event_registration_field_revision} WHERE id = :id', [':id' => $this->revision->id()])->fetchField() > 1) {
+    if ($this->connection->query('SELECT COUNT(DISTINCT vid) FROM {event_registration_field_revision} WHERE id = :id', [
+      ':id' => $this->revision->id(),
+    ])->fetchField() > 1) {
       $form_state->setRedirect(
         'entity.event_registration.version_history',
          ['event_registration' => $this->revision->id()]

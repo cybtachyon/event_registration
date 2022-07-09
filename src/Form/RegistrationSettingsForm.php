@@ -6,7 +6,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class RegistrationSettingsForm.
+ * Event Registration Module Settings form.
  *
  * @ingroup event_registration
  */

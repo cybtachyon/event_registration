@@ -2,12 +2,10 @@
 
 namespace Drupal\event_registration\Controller;
 
-use Drupal\Component\Utility\Xss;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Url;
 use Drupal\event\Entity\EventInterface;
-use Drupal\event_registration\Entity\RegistrationInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -38,7 +36,7 @@ class EventRegistrationController extends ControllerBase implements ContainerInj
     $instance->renderer = $container->get('renderer');
     return $instance;
   }
-  
+
   /**
    * The controller title callback.
    *
@@ -65,16 +63,16 @@ class EventRegistrationController extends ControllerBase implements ContainerInj
    */
   public function overview(EventInterface $event) {
     $types = $this->registrationManager->getAvailableRegistrationTypes($event, $this->currentUser());
-    
+
     $view_builder = $this->entityTypeManager()->getViewBuilder('event_registration_type');
-    
+
     $build = [
       'registration_types' => [
         '#type' => 'htmltag',
         '#tag' => 'dl',
       ],
     ];
-    
+
     foreach ($types as $type) {
       $build['registration_types'] += [
         $type->id() . '_label' => [
@@ -110,7 +108,7 @@ class EventRegistrationController extends ControllerBase implements ContainerInj
     $build['#cache']['max-age'] = 0;
     return $build;
   }
-  
+
   /**
    * The controller title callback.
    *
@@ -137,16 +135,16 @@ class EventRegistrationController extends ControllerBase implements ContainerInj
    */
   public function list(EventInterface $event) {
     $types = $this->registrationManager->getAvailableRegistrationTypes($event, $this->currentUser());
-    
+
     $view_builder = $this->entityTypeManager()->getViewBuilder('event_registration_type');
-    
+
     $build = [
       'registration_types' => [
         '#type' => 'htmltag',
         '#tag' => 'dl',
       ],
     ];
-    
+
     foreach ($types as $type) {
       $build['registration_types'] += [
         $type->id() . '_label' => [

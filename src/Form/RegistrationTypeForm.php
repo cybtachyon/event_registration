@@ -6,7 +6,7 @@ use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class RegistrationTypeForm.
+ * RegistrationType entity form.
  */
 class RegistrationTypeForm extends EntityForm {
 
@@ -40,7 +40,7 @@ class RegistrationTypeForm extends EntityForm {
       '#type' => 'textarea',
       '#default_value' => $event_registration_type->getDescription(),
     ];
-    
+
     $event_types = $this->entityTypeManager->getStorage('event_type')->loadMultiple();
     $event_options = array_map(function ($event_types) {
       return $event_types->label();
@@ -54,7 +54,7 @@ class RegistrationTypeForm extends EntityForm {
       '#options' => $event_options,
       '#default_value' => $event_registration_type->getEventTypeIds(),
     ];
-    
+
     $profile_types = $this->entityTypeManager->getStorage('profile_type')->loadMultiple();
     $profile_options = array_map(function ($profile_type) {
       return $profile_type->label();
@@ -67,7 +67,7 @@ class RegistrationTypeForm extends EntityForm {
       '#options' => $profile_options,
       '#default_value' => $event_registration_type->getProfileTypeId(),
     ];
-    
+
     $definitions = $this->entityTypeManager->getDefinitions();
     $type_options = array_map(function ($definition) {
       return $definition->getLabel();

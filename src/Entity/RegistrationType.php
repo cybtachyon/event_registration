@@ -2,7 +2,6 @@
 
 namespace Drupal\event_registration\Entity;
 
-use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 
 /**
@@ -155,7 +154,10 @@ class RegistrationType extends ConfigEntityBundleBase implements RegistrationTyp
     }
     return $this;
   }
-  
+
+  /**
+   *
+   */
   public function supportsEventTypeId($event_type_id) {
     return in_array($event_type_id, $this->eventTypes);
   }

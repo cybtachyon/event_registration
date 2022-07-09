@@ -5,16 +5,13 @@ namespace Drupal\event_registration;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\event\Entity\EventType;
 use Drupal\event\Entity\EventTypeInterface;
-use Drupal\event_registration\Entity\Registration;
 use Drupal\event_registration\Entity\RegistrationType;
 use Drupal\event_registration\Entity\RegistrationTypeInterface;
-
 
 /**
  * Provides dynamic permissions for Registration of different types.
  *
  * @ingroup event_registration
- *
  */
 class RegistrationPermissions {
 
@@ -34,7 +31,7 @@ class RegistrationPermissions {
     foreach ($registration_types as $type) {
       $perms += $this->buildPermissions($type);
     }
-    
+
     $event_types = EventType::loadMultiple();
     foreach ($event_types as $event_type) {
       $perms += $this->buildEventPermissions($event_type, $registration_types);
@@ -92,7 +89,7 @@ class RegistrationPermissions {
       ],
     ];
   }
-  
+
   /**
    * Returns a list of registration permissions for a given event type.
    *
@@ -105,7 +102,7 @@ class RegistrationPermissions {
    *   An associative array of permission names and descriptions.
    */
   protected function buildEventPermissions(EventTypeInterface $event_type, array $registration_types) {
-    
+
     $event_type_id = $event_type->id();
     $event_type_params = [
       '%event_type_name' => $event_type->label(),
@@ -122,7 +119,7 @@ class RegistrationPermissions {
         'title' => $this->t('Access Registration List for %event_type_name Event', $event_type_params),
       ],
     ];
-    
+
     foreach ($registration_types as $registration_type) {
       $registration_type_id = $registration_type->id();
       $registration_type_param = $event_type_params + [
@@ -134,7 +131,7 @@ class RegistrationPermissions {
         ],
       ];
     }
-    
+
     return $perms;
   }
 
