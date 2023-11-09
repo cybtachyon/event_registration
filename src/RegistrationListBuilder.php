@@ -84,6 +84,7 @@ class RegistrationListBuilder extends EntityListBuilder {
     $query = $this
       ->getStorage()
       ->getQuery()
+      ->checkAccess()
       ->sort($this->entityType
         ->getKey('id'));
 
