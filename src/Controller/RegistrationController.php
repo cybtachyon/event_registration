@@ -129,7 +129,7 @@ class RegistrationController extends ControllerBase implements ContainerInjectio
           ]));
         }
         else {
-          $link = $event_registration->link($date);
+          $link = $event_registration->toLink($date)->toString();
         }
 
         $row = [];
