@@ -3,10 +3,28 @@ event_registration.event_registration_type.*:
   label: 'Registration Type config'
   mapping:
     id:
-      type: string
       label: 'ID'
+      type: string
     label:
-      type: label
       label: 'Label'
+      type: label
+    description:
+      label: 'Description'
+      type: text
+    eventTypes:
+      label: 'Event Types'
+      type: sequence
+      sequence:
+        label: 'Event Type'
+        type: string
+    locked:
+      label: 'Locked'
+      type: boolean
+    profileType:
+      label: 'Profile Type'
+      type: string
+    targetEntityType:
+      label: 'Target Entity Type'
+      type: string
     uuid:
       type: string

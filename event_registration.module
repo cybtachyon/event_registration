@@ -14,15 +14,10 @@ use Drupal\event\Entity\EventInterface;
  * Implements hook_help().
  */
 function event_registration_help($route_name, RouteMatchInterface $route_match) {
-  switch ($route_name) {
-    // Main module help for the event_registration module.
-    case 'help.page.event_registration':
-      $output = '';
-      $output .= '<h3>' . t('About') . '</h3>';
-      return $output;
-
-    default:
+  if ($route_name === 'help.page.event_registration') {
+    return '<h3>' . t('About') . '</h3>';
   }
+  return NULL;
 }
 
 /**
@@ -72,7 +67,7 @@ function event_registration_entity_type_alter(array &$entity_types) {
  * Implements hook_ENTITY_TYPE_access().
  */
 function event_registration_event_access(EventInterface $event, $operation, AccountInterface $account) {
-  if ($operation == 'register') {
+  if ($operation === 'register') {
     $bundle = $event->bundle();
     $permissions = [
       'register for any event',

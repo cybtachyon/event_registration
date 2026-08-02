@@ -35,4 +35,3 @@ entity.event_registration.register:
         type: 'entity:event_registration_type'
   requirements:
     _permission: 'register for any event'
-
